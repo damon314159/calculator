@@ -76,10 +76,14 @@ button {
   transition: all 250ms;
 }
 button:hover {
-  color: grey;
-  transform: translateY(-2px);
+  color: rgb(92, 92, 255);
+  text-shadow: 0px 0px 1px black;
+  transform: translateY(-1px);
+  box-shadow: 1px 2px 1px 1px grey;
 }
 button:active {
-  color: grey;
-  transform: translateY(2px);
+  color: rgb(92, 92, 255);
+  text-shadow: 0px 0px 1px black;
+  transform: translateY(1px);
+  box-shadow: 1px 1px 1px 1px grey;
 }
