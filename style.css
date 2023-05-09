@@ -1,0 +1,85 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(235,235,235);
+}
+
+.calc-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgb(202, 224, 243);
+  border: 8px solid black;
+  border-radius: 8px;
+  
+  padding: 8px;
+  
+}
+
+.display {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  min-height: 50px;
+  background-color: rgb(254, 240, 199);
+  border: 4px solid grey;
+  border-radius: 4px;
+  margin: 8px 2px;
+  padding: 4px;
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.button-panel, .left-side,
+.right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.top-half, .bottom-half,
+.row-one, .row-two,
+.row-three, .row-four {
+  display: flex;
+  justify-content: space-around;
+}
+
+button.num0, button.equals { /*wide buttons*/
+  flex: 1 1 auto;
+}
+
+.row-one > button,
+.row-two > button,
+.row-three > button,
+.row-four > button {
+  background-color: rgb(194, 194, 194);
+}
+
+.equals {
+  background-color: rgb(203, 255, 198);
+}
+
+.del, .clear {
+  background-color: rgb(255, 141, 141);
+}
+
+button {
+  min-height: 60px;
+  min-width: 60px;
+  padding: 10px;
+  margin: 3px;
+  border: 1px solid black;
+  border-radius: 4px;
+  transition: all 250ms;
+}
+button:hover {
+  color: grey;
+  transform: translateY(-2px);
+}
+button:active {
+  color: grey;
+  transform: translateY(2px);
+}
