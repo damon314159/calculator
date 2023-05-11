@@ -39,17 +39,28 @@ let num1 = 0;
 let num2 = 0;
 let operation = '';
 display.textContent = 0;
-let displayValue = display.textContent;
+displayValue = display.textContent;
 const point = document.querySelector(".point");
 point.disabled = false;
 toggleOpsButtons(true); //sets back to defaults
 };
 
-function toggleOpsButtons(toDefault = false) {
-  //start with equals off, other ops on
-  //switch to other ops off, equals on
-  //if argument true, set to defaults, 
-  //otherwise simply toggle
+function toggleOpsButtons(toDefault = null) { 
+  //argument can force state, otherwise state is calculated
+  const opsButtons = document.querySelectorAll(".operator");
+  const equalsBtn = document.querySelector(".equals");
+  if (toDefault === null) {
+    toDefault = equalsBtn.disabled == false ? true : false; 
+    //determines current state, prepares correct changes
+  };
+  if (toDefault == true) {
+    equalsBtn.disabled = true;
+    opsButtons.forEach(node => node.disabled = false);
+  } 
+  else if (toDefault == false) {
+    equalsBtn.disabled = false;
+    opsButtons.forEach(node => node.disabled = true);
+  };
 };
 
 function switchToNum2() { //called when operation selected
@@ -64,7 +75,7 @@ function switchToNum2() { //called when operation selected
 function performButton(target) {
   const btnClass = target.className;
   if (btnClass.slice(0,3)=="num"){
-    if (displayValue==0) {
+    if (displayValue==="0") {
       display.textContent = btnClass.slice(3,4);
       displayValue = display.textContent;
     } else {
@@ -73,7 +84,10 @@ function performButton(target) {
     };
   }
   else if (btnClass=="point") {
-    //fill in here
+    display.textContent = displayValue + ".";
+    displayValue = display.textContent;
+    const point = document.querySelector(".point");
+    point.disabled = true;
   }
   else if (btnClass.slice(0,8)=="operator") {
 
@@ -95,13 +109,23 @@ function performButton(target) {
     };
   }
   else if (btnClass=="equals") {
-    //fill in here
+    num2 = displayValue;
+    let result = operate(Number(num1), Number(num2), operation);
+    result = Math.round(result*"1e8")*"1e-8";
+    if (result > Number.MAX_SAFE_INTEGER) {
+      result = result.toExponential(8);
+    };
+    //round to 8dp -- represent exponential if too large to be accurate
+    display.textContent = result;
+    displayValue = display.textContent;
+    toggleOpsButtons();
   }
   else if (btnClass=="del") {
-    //fill in here
+    display.textContent = displayValue.slice(0,-1);
+    displayValue = display.textContent;
   }
   else if (btnClass=="clear") {
-    //fill in here
+    reset();
   };
 };
 
@@ -114,9 +138,10 @@ function addListeners() {
 
 
 const display = document.querySelector(".display>span");
+let displayValue = display.textContent;
 let num1;
 let num2;
 let operation;
-let displayValue = display.textContent;
 reset();
 addListeners();
+toggleOpsButtons(true);
