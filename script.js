@@ -29,6 +29,9 @@ function operate(num1, num2, operation) {
       result = multiply(num1, num2);
       break;
     case "divide" :
+      if (num2 === 0) {
+        return "Maths Error";
+      };
       result = divide(num1, num2);
   };
   return result;
@@ -74,6 +77,11 @@ function switchToNum2() { //called when operation selected
 
 function performButton(target) {
   const btnClass = target.className;
+  if (display.textContent == "Maths Error") {
+    display.textContent='';
+    displayValue = display.textContent; 
+    //clear box if an error screen when user types next calc in
+  };
   if (btnClass.slice(0,3)=="num"){
     if (displayValue==="0") {
       display.textContent = btnClass.slice(3,4);
@@ -111,11 +119,14 @@ function performButton(target) {
   else if (btnClass=="equals") {
     num2 = displayValue;
     let result = operate(Number(num1), Number(num2), operation);
-    result = Math.round(result*"1e8")*"1e-8";
-    if (result > Number.MAX_SAFE_INTEGER) {
-      result = result.toExponential(8);
+    if (typeof(result)=="string") {}
+    else {
+      result = Math.round(result*"1e8")*"1e-8";
+      if (result > Number.MAX_SAFE_INTEGER) {
+        result = result.toExponential(8);
+      };
+      //round to 8dp -- represent exponential if too large to be accurate
     };
-    //round to 8dp -- represent exponential if too large to be accurate
     display.textContent = result;
     displayValue = display.textContent;
     toggleOpsButtons();
