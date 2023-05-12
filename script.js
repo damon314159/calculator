@@ -52,6 +52,7 @@ function produceOutput() {
   };
   display.textContent = result;
   displayValue = display.textContent;
+  calcSoFar.textContent = "";
   operation = "";
   isOpSelected = false;
 };
@@ -63,6 +64,7 @@ operation = "";
 isOpSelected = false;
 display.textContent = "0";
 displayValue = display.textContent;
+calcSoFar.textContent = "";
 };
 
 function switchToNum2() { //called when operation selected
@@ -70,13 +72,16 @@ function switchToNum2() { //called when operation selected
   num1 = displayValue;
   display.textContent = 0;
   displayValue = display.textContent;
+  if (num1 == "Maths Error") { //stops errors being moved to upper display
+    num1 = "0";
+  };
 }; 
 
 function performButton(target) {
   const btnClass = target.className;
   if (display.textContent == "Maths Error") {
     display.textContent="0";
-    displayValue = display.textContent; 
+    displayValue = display.textContent;
     //clear box if an error screen when user types next calc in
   };
   if (btnClass.slice(0,3)=="num"){
@@ -100,21 +105,26 @@ function performButton(target) {
       //then below select the operator and take previous result as num1
       produceOutput();
     };
+
     if (btnClass.slice(9)=="add") {
       operation = "add";
       switchToNum2();
+      calcSoFar.textContent = num1+" +";
     }
     else if (btnClass.slice(9)=="subtract") {
       operation = "subtract";
       switchToNum2();
+      calcSoFar.textContent = num1+" -";
     }
     else if (btnClass.slice(9)=="multiply") {
       operation = "multiply";
       switchToNum2();
+      calcSoFar.textContent = num1+" ×";
     }
     else if (btnClass.slice(9)=="divide") {
       operation = "divide";
       switchToNum2();
+      calcSoFar.textContent = num1+" ÷";
     };
   }
   else if (btnClass=="equals") {
@@ -140,6 +150,7 @@ function addListeners() {
 
 const display = document.querySelector(".display>.current-num>span");
 let displayValue = display.textContent;
+const calcSoFar = document.querySelector(".display>.calc-so-far>span");
 let num1;
 let num2;
 let operation;
