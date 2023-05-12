@@ -138,7 +138,7 @@ function addListeners() {
 };
 
 
-const display = document.querySelector(".display>span");
+const display = document.querySelector(".display>.current-num>span");
 let displayValue = display.textContent;
 let num1;
 let num2;
