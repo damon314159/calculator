@@ -42,13 +42,22 @@ function operate(num1, num2, operation) {
 
 function produceOutput() {
   num2 = displayValue;
-  let result = operate(Number(num1), Number(num2), operation);
-  if (typeof(result)!="string") {//if Error thrown don't try to round it
-    result = Math.round(result*"1e8")*"1e-8";
-    if (result > Number.MAX_SAFE_INTEGER) {
-      result = result.toExponential(8);
+  let result;
+  if (num2 !== "") {
+    result = operate(Number(num1), Number(num2), operation);
+    if (typeof(result)!="string") {//if Error thrown don't try to round it
+      result = Math.round(result*"1e8")*"1e-8";
+      if (result > Number.MAX_SAFE_INTEGER) {
+        result = result.toExponential(8);
+      };
+      //round to 8dp -- represent as exponential if too large to be accurate
     };
-    //round to 8dp -- represent as exponential if too large to be accurate
+  } else if (num2==="") { 
+    /*this will occur if they change their mind on the operator
+    i.e. they click a new operator without entering num2, triggering 
+    an implicit calculation.
+    We do not need to calculate anything in this case, so as follows:*/
+    result = num1; //result, which becomes new num1, is set to old num1
   };
   display.textContent = result;
   displayValue = display.textContent;
@@ -70,7 +79,7 @@ calcSoFar.textContent = "";
 function switchToNum2() { //called when operation selected
   isOpSelected = true;
   num1 = displayValue;
-  display.textContent = 0;
+  display.textContent = "";
   displayValue = display.textContent;
   if (num1 == "Maths Error") { //stops errors being moved to upper display
     num1 = "0";
