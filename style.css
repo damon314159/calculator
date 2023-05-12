@@ -30,6 +30,10 @@ body {
   border-radius: 4px;
   margin: 8px 2px;
   padding: 4px;
+}
+
+.display .current-num {
+  min-height: 28px;
   font-size: x-large;
   font-weight: 600;
 }
