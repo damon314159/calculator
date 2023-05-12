@@ -33,52 +33,53 @@ function operate(num1, num2, operation) {
         return "Maths Error";
       };
       result = divide(num1, num2);
+      break;
+    default :
+      result = num2; //returns current display if no operator clicked, x==x
   };
   return result;
 };
 
+function produceOutput() {
+  num2 = displayValue;
+  let result = operate(Number(num1), Number(num2), operation);
+  if (typeof(result)!="string") {//if Error thrown don't try to round it
+    result = Math.round(result*"1e8")*"1e-8";
+    if (result > Number.MAX_SAFE_INTEGER) {
+      result = result.toExponential(8);
+    };
+    //round to 8dp -- represent as exponential if too large to be accurate
+  };
+  display.textContent = result;
+  displayValue = display.textContent;
+  operation = "";
+  isOpSelected = false;
+};
+
 function reset() {
-let num1 = 0;
-let num2 = 0;
-let operation = '';
-display.textContent = 0;
+num1 = "0";
+num2 = "0";
+operation = "";
+isOpSelected = false;
+display.textContent = "0";
 displayValue = display.textContent;
 const point = document.querySelector(".point");
 point.disabled = false;
-toggleOpsButtons(true); //sets back to defaults
-};
-
-function toggleOpsButtons(toDefault = null) { 
-  //argument can force state, otherwise state is calculated
-  const opsButtons = document.querySelectorAll(".operator");
-  const equalsBtn = document.querySelector(".equals");
-  if (toDefault === null) {
-    toDefault = equalsBtn.disabled == false ? true : false; 
-    //determines current state, prepares correct changes
-  };
-  if (toDefault == true) {
-    equalsBtn.disabled = true;
-    opsButtons.forEach(node => node.disabled = false);
-  } 
-  else if (toDefault == false) {
-    equalsBtn.disabled = false;
-    opsButtons.forEach(node => node.disabled = true);
-  };
 };
 
 function switchToNum2() { //called when operation selected
+  isOpSelected = true;
   num1 = displayValue;
-  display.textContent = '';
+  display.textContent = 0;
   displayValue = display.textContent;
-  toggleOpsButtons();
   const point = document.querySelector(".point");
-  point.disabled = false; //allows num2 to have a decimal point if num1 did
+  point.disabled = false; //makes sure num2 can have a decimal point
 }; 
 
 function performButton(target) {
   const btnClass = target.className;
   if (display.textContent == "Maths Error") {
-    display.textContent='';
+    display.textContent="0";
     displayValue = display.textContent; 
     //clear box if an error screen when user types next calc in
   };
@@ -98,7 +99,11 @@ function performButton(target) {
     point.disabled = true;
   }
   else if (btnClass.slice(0,8)=="operator") {
-
+    if (isOpSelected===true) { 
+      //2 numbers chosen already - firstly implicitly calculate result
+      //then below select the operator and take previous result as num1
+      produceOutput();
+    };
     if (btnClass.slice(9)=="add") {
       operation = "add";
       switchToNum2();
@@ -117,19 +122,8 @@ function performButton(target) {
     };
   }
   else if (btnClass=="equals") {
-    num2 = displayValue;
-    let result = operate(Number(num1), Number(num2), operation);
-    if (typeof(result)=="string") {}
-    else {
-      result = Math.round(result*"1e8")*"1e-8";
-      if (result > Number.MAX_SAFE_INTEGER) {
-        result = result.toExponential(8);
-      };
-      //round to 8dp -- represent exponential if too large to be accurate
-    };
-    display.textContent = result;
-    displayValue = display.textContent;
-    toggleOpsButtons();
+    produceOutput();
+    isOpSelected = false;
   }
   else if (btnClass=="del") {
     display.textContent = displayValue.slice(0,-1);
@@ -153,6 +147,6 @@ let displayValue = display.textContent;
 let num1;
 let num2;
 let operation;
+let isOpSelected = false;
 reset();
 addListeners();
-toggleOpsButtons(true);
