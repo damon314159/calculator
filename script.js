@@ -63,8 +63,6 @@ operation = "";
 isOpSelected = false;
 display.textContent = "0";
 displayValue = display.textContent;
-const point = document.querySelector(".point");
-point.disabled = false;
 };
 
 function switchToNum2() { //called when operation selected
@@ -72,8 +70,6 @@ function switchToNum2() { //called when operation selected
   num1 = displayValue;
   display.textContent = 0;
   displayValue = display.textContent;
-  const point = document.querySelector(".point");
-  point.disabled = false; //makes sure num2 can have a decimal point
 }; 
 
 function performButton(target) {
@@ -93,10 +89,10 @@ function performButton(target) {
     };
   }
   else if (btnClass=="point") {
-    display.textContent = displayValue + ".";
-    displayValue = display.textContent;
-    const point = document.querySelector(".point");
-    point.disabled = true;
+    if (!displayValue.includes(".")) { //if number is not already a decimal
+      display.textContent = displayValue + ".";
+      displayValue = display.textContent;
+    };
   }
   else if (btnClass.slice(0,8)=="operator") {
     if (isOpSelected===true) { 
